@@ -1,0 +1,5 @@
+spring:
+  cloud:
+    gcp:
+      secretmanager:
+        project-id: lasso-dev-264521

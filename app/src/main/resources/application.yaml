@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: ei2-twitter-service
+  sleuth:
+    sampler:
+      probability: 1.0
+  config:
+    import: "sm://"
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      hibernate:
+        generate_statistics: true
+        session.events.log: false
+    open-in-view: false
+
+  liquibase:
+    change-log: classpath:db/liquibase-changelog.xml
+
+app:
+  error-prefix: TWITTER
+  db:
+    hikari:
+      minimumIdle: 2
+      maximumPoolSize: 50
+      idleTimeout: 60000
+      maxLifetime: 1800000
+      leakDetectionThreshold: 180000
+      connectionTimeout: 30000

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ei2-twitter-service
+  cloud:
+    gcp:
+      config:
+        enabled: false
+      sql:
+        enabled: false
