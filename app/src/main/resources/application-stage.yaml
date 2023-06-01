@@ -2,7 +2,3 @@ app:
   db:
     twitter:
       sqlInstance: lasso-dev-264521:us-central1:sql-microservice-dev
-
-logging:
-  level:
-    io.lassomarketing: DEBUG
