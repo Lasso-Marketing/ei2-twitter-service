@@ -118,6 +118,8 @@ dependencies {
     implementation("io.lassomarketing.ei2:ei2-logging:1.2.1")
     implementation("io.lassomarketing.ei2:ei2-common:1.3.2")
 
+    implementation("commons-io:commons-io:2.12.0")
+
     runtimeOnly("org.liquibase:liquibase-core")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")

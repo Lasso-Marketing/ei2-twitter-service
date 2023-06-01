@@ -20,6 +20,8 @@ spring:
 
 app:
   error-prefix: TWITTER
+  twitter:
+    root-uri: https://business-api.tiktok.com/open_api/v1.3/dmp/custom_audience
   db:
     hikari:
       minimumIdle: 2
