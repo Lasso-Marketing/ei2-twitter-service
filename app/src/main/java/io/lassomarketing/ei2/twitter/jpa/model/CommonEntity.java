@@ -1,4 +1,4 @@
-package io.lassomarketing.ei2.snapchat.jpa.model;
+package io.lassomarketing.ei2.twitter.jpa.model;
 
 import lombok.Getter;
 import lombok.Setter;

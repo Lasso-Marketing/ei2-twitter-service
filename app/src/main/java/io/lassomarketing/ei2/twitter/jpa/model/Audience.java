@@ -1,6 +1,6 @@
-package io.lassomarketing.ei2.snapchat.jpa.model;
+package io.lassomarketing.ei2.twitter.jpa.model;
 
-import io.lassomarketing.ei2.snapchat.dto.AudienceDto;
+import io.lassomarketing.ei2.twitter.dto.AudienceDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

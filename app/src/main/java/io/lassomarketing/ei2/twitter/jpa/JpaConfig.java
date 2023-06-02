@@ -1,4 +1,4 @@
-package io.lassomarketing.ei2.snapchat.jpa;
+package io.lassomarketing.ei2.twitter.jpa;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.HikariConfig;

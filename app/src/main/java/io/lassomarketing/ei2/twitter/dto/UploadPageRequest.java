@@ -1,13 +1,13 @@
-package io.lassomarketing.ei2.snapchat.dto;
+package io.lassomarketing.ei2.twitter.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-public class PreparePagesResponse {
+public class UploadPageRequest {
+
+    private String externalId;
 
     private DataSourceDto dataSource;
 

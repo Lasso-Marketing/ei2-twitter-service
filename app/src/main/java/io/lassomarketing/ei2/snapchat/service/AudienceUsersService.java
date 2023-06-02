@@ -2,7 +2,7 @@ package io.lassomarketing.ei2.snapchat.service;
 
 import io.lassomarketing.ei2.snapchat.api.SnapchatAudienceUsersApiClient;
 import io.lassomarketing.ei2.snapchat.config.AppConfig;
-import io.lassomarketing.ei2.snapchat.dto.DataSourceDto;
+import io.lassomarketing.ei2.twitter.dto.DataSourceDto;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

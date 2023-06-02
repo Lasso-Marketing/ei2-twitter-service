@@ -1,7 +1,7 @@
-package io.lassomarketing.ei2.snapchat.jpa.repository;
+package io.lassomarketing.ei2.twitter.jpa.repository;
 
-import io.lassomarketing.ei2.snapchat.jpa.model.Audience;
-import io.lassomarketing.ei2.snapchat.jpa.model.AudienceId;
+import io.lassomarketing.ei2.twitter.jpa.model.Audience;
+import io.lassomarketing.ei2.twitter.jpa.model.AudienceId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

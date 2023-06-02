@@ -1,4 +1,4 @@
-package io.lassomarketing.ei2.snapchat.dto;
+package io.lassomarketing.ei2.twitter.dto;
 
 import lombok.Getter;
 import lombok.Setter;

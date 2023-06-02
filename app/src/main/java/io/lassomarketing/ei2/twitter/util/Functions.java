@@ -1,4 +1,4 @@
-package io.lassomarketing.ei2.snapchat.util;
+package io.lassomarketing.ei2.twitter.util;
 
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
