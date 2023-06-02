@@ -104,9 +104,10 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-context")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
     implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager")
+    implementation("com.google.cloud:spring-cloud-gcp-starter-trace")
+    implementation("com.google.cloud:spring-cloud-gcp-starter-bigquery")
     implementation("com.google.auth:google-auth-library-oauth2-http")
 
-    implementation("com.google.cloud:spring-cloud-gcp-starter-trace")
     implementation("com.google.cloud:google-cloud-logging")
     implementation("com.google.cloud:google-cloud-logging-logback")
 
