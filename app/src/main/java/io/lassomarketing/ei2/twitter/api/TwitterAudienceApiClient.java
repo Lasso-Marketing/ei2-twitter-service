@@ -1,13 +1,13 @@
 package io.lassomarketing.ei2.twitter.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.lassomarketing.common.api.pubsub.AudienceDto;
 import io.lassomarketing.ei2.twitter.api.model.TwitterApiResponse;
 import io.lassomarketing.ei2.twitter.api.model.TwitterAudienceDto;
 import io.lassomarketing.ei2.twitter.api.oauth.AuthorizationService;
 import io.lassomarketing.ei2.twitter.api.oauth.HttpParameter;
 import io.lassomarketing.ei2.twitter.api.oauth.OAuthAuthorization;
-import io.lassomarketing.common.utils.AudienceUtils;
+import io.lassomarketing.ei2.twitter.dto.AudienceDto;
+import io.lassomarketing.ei2.twitter.utils.AudienceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

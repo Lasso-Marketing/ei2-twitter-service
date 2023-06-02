@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum Ei2TwitterErrorCode {
 
-    YOUR_ERROR_NAME("TWITTER-0001");
+    CANNOT_BUILD_AUDIENCE_NAME("TWITTER-0001");
 
     String code;
 

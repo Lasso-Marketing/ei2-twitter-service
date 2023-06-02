@@ -99,8 +99,9 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.cloud:spring-cloud-context")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.cloud:spring-cloud-context")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
     implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager")
     implementation("com.google.auth:google-auth-library-oauth2-http")

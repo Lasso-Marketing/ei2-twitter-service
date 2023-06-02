@@ -1,5 +1,4 @@
 app:
-  pdx-message-status-topic-name: camunda-pdx-msgstatus-events
   db:
     twitter:
       sqlInstance: lasso-prod-264521:us-central1:sql-microservice-prod

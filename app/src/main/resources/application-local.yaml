@@ -6,3 +6,4 @@ app:
 logging:
   level:
     io.lassomarketing: DEBUG
+

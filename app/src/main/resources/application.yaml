@@ -21,7 +21,15 @@ spring:
 app:
   error-prefix: TWITTER
   twitter:
-    root-uri: https://business-api.tiktok.com/open_api/v1.3/dmp/custom_audience
+    root-uri: https://ads-api.twitter.com/12
+    api:
+      audience:
+        connect-timeout: 30s
+        read-timeout: 60s
+      audience-users:
+        connect-timeout: 30s
+        read-timeout: 60s
+
   db:
     hikari:
       minimumIdle: 2

@@ -11,7 +11,7 @@ import java.time.Duration;
 @Getter
 @Setter
 @Validated
-@ConfigurationProperties("common.twitter.api.audience-users")
+@ConfigurationProperties("app.twitter.api.audience-users")
 public class TwitterAudienceUsersApiProperties {
 
     @NotNull

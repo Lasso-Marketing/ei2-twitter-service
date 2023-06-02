@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import static io.lassomarketing.ei2.tiktok.exception.EI2TiktokErrorCode.CANNOT_BUILD_AUDIENCE_NAME;
+import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.CANNOT_BUILD_AUDIENCE_NAME;
 
 /**
  * Copied from k8s-exchange-service

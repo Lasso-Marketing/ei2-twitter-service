@@ -1,29 +1,24 @@
 package io.lassomarketing.ei2.twitter.api.oauth;
 
-import io.lassomarketing.common.twitter.config.TwitterApiProperties;
-import io.lassomarketing.common.twitter.config.TwitterConfigProperties;
+import io.lassomarketing.ei2.twitter.config.TwitterApiProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorizationService {
 
     private final TwitterApiProperties twitterApiProperties;
-    private final TwitterConfigProperties twitterConfigProperties;
-
-    public AuthorizationService(TwitterApiProperties twitterApiProperties, TwitterConfigProperties twitterConfigProperties) {
-        this.twitterApiProperties = twitterApiProperties;
-        this.twitterConfigProperties = twitterConfigProperties;
-    }
 
     public String buildAuthorizationHeader(HttpMethod method, String uri, List<HttpParameter> httpParameters) {
         OAuthAuthorization authorization = new OAuthAuthorization(
-                twitterConfigProperties.getOauthConsumerKey(),
-                twitterConfigProperties.getOauthConsumerSecret(),
-                twitterConfigProperties.getOauthToken(),
-                twitterConfigProperties.getOauthSecret()
+                twitterApiProperties.getOauthConsumerKey(),
+                twitterApiProperties.getOauthConsumerSecret(),
+                twitterApiProperties.getOauthToken(),
+                twitterApiProperties.getOauthSecret()
         );
         String url = twitterApiProperties.getRootUri() + uri;
         return authorization.generateAuthorizationHeader(method.name(), url, httpParameters);
