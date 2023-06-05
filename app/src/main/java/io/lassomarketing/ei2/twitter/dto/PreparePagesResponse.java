@@ -13,4 +13,6 @@ public class PreparePagesResponse {
 
     private Integer pageNumber;
 
+    private Integer pageSize;
+
 }

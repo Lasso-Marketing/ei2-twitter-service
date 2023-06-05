@@ -26,6 +26,7 @@ spring:
 app:
   error-prefix: TWITTER
   users-batch-payload-size: 5_000_000
+
   twitter:
     root-uri: https://ads-api.twitter.com/12
     api:

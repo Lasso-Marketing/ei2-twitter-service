@@ -39,4 +39,9 @@ public class BigQueryService {
         return bigQuery.getTable(tableId).getNumRows();
     }
 
+    public Long getTableBytes(String dataSet, String tableName) {
+        TableId tableId = TableId.of(dataSet, tableName);
+        return bigQuery.getTable(tableId).getNumBytes();
+    }
+
 }
