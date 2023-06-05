@@ -2,8 +2,8 @@ package io.lassomarketing.ei2.snapchat.controller;
 
 import com.google.cloud.logging.TraceLoggingEnhancer;
 import io.lassomarketing.ei2.common.response.EI2ResponseBody;
-import io.lassomarketing.ei2.snapchat.dto.*;
-import io.lassomarketing.ei2.snapchat.service.SnapchatService;
+//import io.lassomarketing.ei2.snapchat.dto.*;
+import io.lassomarketing.ei2.snapchat.service.TwitterService;
 import io.lassomarketing.ei2.twitter.dto.AudienceIdDto;
 import io.lassomarketing.ei2.twitter.dto.DataSourceDto;
 import io.lassomarketing.ei2.twitter.dto.PreparePagesResponse;
@@ -24,9 +24,9 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 @RestController
-public class SnapchatController {
+public class TwitterController {
 
-    private final SnapchatService snapchatService;
+    private final TwitterService twitterService;
 
     private final Tracer tracer;
 
@@ -35,26 +35,26 @@ public class SnapchatController {
      */
     @PostMapping("/upsertAudience")
     public EI2ResponseBody<Map<String, String>> upsertAudience(@Valid @RequestBody UpsertAudienceRequest request) {
-        String externalId = snapchatService.upsertAudience(request);
+        String externalId = twitterService.upsertAudience(request);
         return new EI2ResponseBody<>(Map.of("external_id", externalId));
     }
 
     @PostMapping("/preparePagesList")
     public EI2ResponseBody<List<PreparePagesResponse>> preparePagesList(@RequestBody List<DataSourceDto> dataSources) {
-        return new EI2ResponseBody<>(snapchatService.preparePages(dataSources, getTraceId()));
+        return new EI2ResponseBody<>(twitterService.preparePages(dataSources, getTraceId()));
     }
 
-    @PostMapping("/uploadPage")
-    public EI2ResponseBody<?> uploadPage(@RequestBody UploadPageRequest request) {
-        snapchatService.uploadAudiencePage(request.getExternalId(), request.getDataSource(), request.getPageNumber(),
-                                           getTraceId());
-        return new EI2ResponseBody<>();
-    }
-
-    @PostMapping("/getUploadResults")
-    public EI2ResponseBody<UploadResultsResponse> getUploadResults(@RequestBody AudienceIdDto audienceIdDto) {
-        return new EI2ResponseBody<>(snapchatService.getUploadResults(audienceIdDto, getTraceId()));
-    }
+//    @PostMapping("/uploadPage")
+//    public EI2ResponseBody<?> uploadPage(@RequestBody UploadPageRequest request) {
+//        twitterService.uploadAudiencePage(request.getExternalId(), request.getDataSource(), request.getPageNumber(),
+//                                          getTraceId());
+//        return new EI2ResponseBody<>();
+//    }
+//
+//    @PostMapping("/getUploadResults")
+//    public EI2ResponseBody<UploadResultsResponse> getUploadResults(@RequestBody AudienceIdDto audienceIdDto) {
+//        return new EI2ResponseBody<>(twitterService.getUploadResults(audienceIdDto, getTraceId()));
+//    }
 
     private String getTraceId() {
         String traceId = tracer.currentSpan().context().traceId();

@@ -24,7 +24,7 @@ public class SecretsConfig {
     }
 
     @Bean
-    public JsonNode twitterApiConfigSecret(@Value("${sm://api-twitter-sandbox-config}") String secretValue) throws Exception {
+    public JsonNode twitterApiConfigSecret(@Value("${sm://api-twitter-config}") String secretValue) throws Exception {
         try {
             return objectMapper.readTree(secretValue);
         } catch (JsonProcessingException e) {

@@ -7,6 +7,11 @@ spring:
   config:
     import: "sm://"
 
+  cloud:
+    gcp:
+      bigquery:
+        dataset-name: match_dictionaries
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -20,6 +25,7 @@ spring:
 
 app:
   error-prefix: TWITTER
+  users-batch-payload-size: 5_000_000
   twitter:
     root-uri: https://ads-api.twitter.com/12
     api:
