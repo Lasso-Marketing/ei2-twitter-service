@@ -1,9 +1,8 @@
-package io.lassomarketing.ei2.snapchat.controller;
+package io.lassomarketing.ei2.twitter.controller;
 
 import com.google.cloud.logging.TraceLoggingEnhancer;
 import io.lassomarketing.ei2.common.response.EI2ResponseBody;
-//import io.lassomarketing.ei2.snapchat.dto.*;
-import io.lassomarketing.ei2.snapchat.service.TwitterService;
+import io.lassomarketing.ei2.twitter.service.TwitterService;
 import io.lassomarketing.ei2.twitter.dto.AudienceIdDto;
 import io.lassomarketing.ei2.twitter.dto.DataSourceDto;
 import io.lassomarketing.ei2.twitter.dto.PreparePagesResponse;
@@ -51,11 +50,11 @@ public class TwitterController {
                                           request.getPageSize(), getTraceId());
         return new EI2ResponseBody<>();
     }
-//
-//    @PostMapping("/getUploadResults")
-//    public EI2ResponseBody<UploadResultsResponse> getUploadResults(@RequestBody AudienceIdDto audienceIdDto) {
-//        return new EI2ResponseBody<>(twitterService.getUploadResults(audienceIdDto, getTraceId()));
-//    }
+
+    @PostMapping("/getUploadResults")
+    public EI2ResponseBody<UploadResultsResponse> getUploadResults(@RequestBody AudienceIdDto audienceIdDto) {
+        return new EI2ResponseBody<>(twitterService.getUploadResults(audienceIdDto, getTraceId()));
+    }
 
     private String getTraceId() {
         String traceId = tracer.currentSpan().context().traceId();

@@ -1,15 +1,17 @@
-package io.lassomarketing.ei2.snapchat.service;
+package io.lassomarketing.ei2.twitter.service;
 
 import io.lassomarketing.ei2.common.exception.EI2Exception;
 import io.lassomarketing.ei2.twitter.config.AppConfig;
 import io.lassomarketing.ei2.twitter.api.TwitterAudienceApiClient;
+import io.lassomarketing.ei2.twitter.dto.AudienceIdDto;
+import io.lassomarketing.ei2.twitter.dto.UploadResultsResponse;
 import io.lassomarketing.ei2.twitter.jpa.model.AudienceUploadStatistics;
 import io.lassomarketing.ei2.twitter.jpa.repository.AudienceUploadStatisticsRepository;
 import io.lassomarketing.ei2.twitter.dto.AudienceDto;
 import io.lassomarketing.ei2.twitter.dto.DataSourceDto;
 import io.lassomarketing.ei2.twitter.dto.PreparePagesResponse;
 import io.lassomarketing.ei2.twitter.dto.UpsertAudienceRequest;
-import io.lassomarketing.ei2.twitter.util.Functions;
+import io.lassomarketing.ei2.twitter.utils.Functions;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +22,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.lassomarketing.ei2.snapchat.error.TwitterErrorCode.MISSED_STATISTICS_RECORD;
-import static io.lassomarketing.ei2.snapchat.error.TwitterErrorCode.NO_AUDIENCE_DATA;
+import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.MISSED_STATISTICS_RECORD;
+import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.NO_AUDIENCE_DATA;
 
 
 @Slf4j
@@ -101,11 +103,12 @@ public class TwitterService {
         return pagesResponse;
     }
 
-//    public UploadResultsResponse getUploadResults(AudienceIdDto audienceIdDto, String traceId) {
-//        AudienceUploadStatistics statistics = audienceUploadStatisticsRepository.findById(traceId)
-//                .orElseThrow(() -> new EI2Exception(MISSED_STATISTICS_RECORD.getCode(), traceId));
-//        log.info("Uploaded {} audience. TotalRecords: {}, MatchedRecords: {}", audienceIdDto.getAudienceId(),
-//                 statistics.getTotalRecords(), statistics.getMatchedRecords());
-//        return new UploadResultsResponse(statistics.getTotalRecords(), statistics.getMatchedRecords());
-//    }
+    public UploadResultsResponse getUploadResults(AudienceIdDto audienceIdDto, String traceId) {
+        AudienceUploadStatistics statistics = audienceUploadStatisticsRepository.findById(traceId)
+                .orElseThrow(() -> new EI2Exception(MISSED_STATISTICS_RECORD.getCode(), traceId));
+        log.info("Uploaded {} audience. TotalRecords: {}, MatchedRecords: {}", audienceIdDto.getAudienceId(),
+                 statistics.getTotalRecords(), statistics.getMatchedRecords());
+        return new UploadResultsResponse(statistics.getTotalRecords(), statistics.getMatchedRecords());
+    }
+
 }

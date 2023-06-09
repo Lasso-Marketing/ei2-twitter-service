@@ -1,4 +1,4 @@
-package io.lassomarketing.ei2.snapchat.service;
+package io.lassomarketing.ei2.twitter.service;
 
 import io.lassomarketing.ei2.twitter.api.TwitterAudienceUsersApiClient;
 import io.lassomarketing.ei2.twitter.dto.DataSourceDto;

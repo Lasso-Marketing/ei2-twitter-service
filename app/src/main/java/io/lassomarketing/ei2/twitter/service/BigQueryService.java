@@ -1,4 +1,4 @@
-package io.lassomarketing.ei2.snapchat.service;
+package io.lassomarketing.ei2.twitter.service;
 
 import com.google.cloud.bigquery.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class BigQueryService {
     private TableResult loadPage(String dataSet, String tableName, int pageNumber, int pageSize) {
         TableId tableId = TableId.of(dataSet, tableName);
         return bigQuery.listTableData(tableId, BigQuery.TableDataListOption.pageSize(pageSize),
-                                                     BigQuery.TableDataListOption.startIndex(pageNumber * pageSize));
+                                      BigQuery.TableDataListOption.startIndex((long) pageNumber * pageSize));
     }
 
     public BigInteger getTableSize(String dataSet, String tableName) {

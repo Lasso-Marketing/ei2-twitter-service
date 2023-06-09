@@ -1,4 +1,4 @@
-package io.lassomarketing.ei2.snapchat.service;
+package io.lassomarketing.ei2.twitter.service;
 
 public interface AudienceUploadFieldNames {
 

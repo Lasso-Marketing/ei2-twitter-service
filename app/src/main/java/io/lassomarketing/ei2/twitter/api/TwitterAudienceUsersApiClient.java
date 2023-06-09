@@ -2,11 +2,11 @@ package io.lassomarketing.ei2.twitter.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lassomarketing.ei2.common.exception.EI2Exception;
-import io.lassomarketing.ei2.snapchat.service.AudienceUploadFieldNames;
 import io.lassomarketing.ei2.twitter.api.model.TwitterApiResponse;
 import io.lassomarketing.ei2.twitter.api.model.TwitterAudienceUsersDto;
 import io.lassomarketing.ei2.twitter.api.model.TwitterAudienceUsersOperation;
 import io.lassomarketing.ei2.twitter.api.oauth.AuthorizationService;
+import io.lassomarketing.ei2.twitter.service.AudienceUploadFieldNames;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.lassomarketing.ei2.snapchat.error.TwitterErrorCode.UNKNOWN_SCHEMA;
+import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.UNKNOWN_SCHEMA;
 
 @Slf4j
 @Service
