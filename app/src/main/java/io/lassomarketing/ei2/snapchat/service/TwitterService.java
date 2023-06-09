@@ -9,6 +9,8 @@ import io.lassomarketing.ei2.twitter.dto.AudienceDto;
 import io.lassomarketing.ei2.twitter.dto.DataSourceDto;
 import io.lassomarketing.ei2.twitter.dto.PreparePagesResponse;
 import io.lassomarketing.ei2.twitter.dto.UpsertAudienceRequest;
+import io.lassomarketing.ei2.twitter.util.Functions;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static io.lassomarketing.ei2.snapchat.error.TwitterErrorCode.MISSED_STATISTICS_RECORD;
 import static io.lassomarketing.ei2.snapchat.error.TwitterErrorCode.NO_AUDIENCE_DATA;
 
 
@@ -43,24 +46,24 @@ public class TwitterService {
             return twitterAudienceApiClient.create(newAudience);
         }
 
-        if (!isAudienceNameEquals(existingAudience, newAudience)) {
+        if (!Objects.equals(existingAudience.getName(), newAudience.getName())) {
             return twitterAudienceApiClient.update(existingAudience.getExternalId(), newAudience);
         }
         return existingAudience.getExternalId();
     }
 
-    private static boolean isAudienceNameEquals(AudienceDto existingAudience, AudienceDto newAudience) {
-        return Objects.equals(existingAudience.getName(), newAudience.getName());
+
+    @Transactional
+    public void uploadAudiencePage(String socialAccountId, String externalId, Long expireMinutes,
+                                   DataSourceDto dataSourceDto, int pageNumber, Integer pageSize, String traceId) {
+
+        int matchedRecords = audienceUsersService.uploadUsers(socialAccountId, externalId, expireMinutes, dataSourceDto,
+                                                              pageNumber, pageSize);
+        audienceUploadStatisticsRepository.findById(traceId)
+                .map(Functions.peek(s -> s.setMatchedRecords(s.getMatchedRecords() + matchedRecords)))
+                .orElseThrow(() -> new EI2Exception(MISSED_STATISTICS_RECORD.getCode(), traceId));
     }
-//
-//    @Transactional
-//    public void uploadAudiencePage(String externalId, DataSourceDto dataSourceDto, int pageNumber, String traceId) {
-//        int matchedRecords = audienceUsersService.uploadUsers(externalId, dataSourceDto, pageNumber);
-//        audienceUploadStatisticsRepository.findById(traceId)
-//                .map(Functions.peek(s -> s.setMatchedRecords(s.getMatchedRecords() + matchedRecords)))
-//                .orElseThrow(() -> new EI2Exception(MISSED_STATISTICS_RECORD.getCode(), traceId));
-//    }
-//
+
     public List<PreparePagesResponse> preparePages(List<DataSourceDto> dataSources, String traceId) {
         int totalRecords = 0;
 

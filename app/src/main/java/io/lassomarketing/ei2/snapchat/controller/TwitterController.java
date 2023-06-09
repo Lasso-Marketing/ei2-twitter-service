@@ -44,12 +44,13 @@ public class TwitterController {
         return new EI2ResponseBody<>(twitterService.preparePages(dataSources, getTraceId()));
     }
 
-//    @PostMapping("/uploadPage")
-//    public EI2ResponseBody<?> uploadPage(@RequestBody UploadPageRequest request) {
-//        twitterService.uploadAudiencePage(request.getExternalId(), request.getDataSource(), request.getPageNumber(),
-//                                          getTraceId());
-//        return new EI2ResponseBody<>();
-//    }
+    @PostMapping("/uploadPage")
+    public EI2ResponseBody<?> uploadPage(@RequestBody UploadPageRequest request) {
+        twitterService.uploadAudiencePage(request.getSocialAccountId(), request.getExternalId(),
+                                          request.getExpireMinutes(), request.getDataSource(), request.getPageNumber(),
+                                          request.getPageSize(), getTraceId());
+        return new EI2ResponseBody<>();
+    }
 //
 //    @PostMapping("/getUploadResults")
 //    public EI2ResponseBody<UploadResultsResponse> getUploadResults(@RequestBody AudienceIdDto audienceIdDto) {

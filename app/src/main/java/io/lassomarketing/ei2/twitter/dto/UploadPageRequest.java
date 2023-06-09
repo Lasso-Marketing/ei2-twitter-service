@@ -7,10 +7,11 @@ import lombok.Setter;
 @Setter
 public class UploadPageRequest {
 
+    private String socialAccountId;
     private String externalId;
-
+    private Long expireMinutes;
     private DataSourceDto dataSource;
-
     private Integer pageNumber;
+    private Integer pageSize;
 
 }

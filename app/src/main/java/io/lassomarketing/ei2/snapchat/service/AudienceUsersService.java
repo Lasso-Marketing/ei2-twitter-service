@@ -1,7 +1,6 @@
 package io.lassomarketing.ei2.snapchat.service;
 
-//import io.lassomarketing.ei2.snapchat.api.SnapchatAudienceUsersApiClient;
-//import io.lassomarketing.ei2.snapchat.config.AppConfig;
+import io.lassomarketing.ei2.twitter.api.TwitterAudienceUsersApiClient;
 import io.lassomarketing.ei2.twitter.dto.DataSourceDto;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,24 +19,22 @@ public class AudienceUsersService {
 
     private final BigQueryService bigQueryService;
 
-//    private final SnapchatAudienceUsersApiClient snapchatAudienceUsersApiClient;
-//
-//    private final AppConfig appConfig;
-//
-//
-//    public int uploadUsers(String externalId, DataSourceDto dataSourceDto, int pageNumber) {
-//
-//        List<String> usersData = bigQueryService
-//                .loadStringValuesPage(dataSourceDto.getDataSet(), dataSourceDto.getTemporaryTableName(), pageNumber,
-//                                      appConfig.getUsersBatchSize());
-//
-//        //not hash emails as they are stored already hashed in BigQuery
-//        boolean needSha = !dataSourceDto.getDataType().equalsIgnoreCase(AudienceUploadFieldNames.EMAIL);
-//        usersData = usersData.stream().map(id -> needSha ? sha256(id) : id).collect(Collectors.toList());
-//
-//        return snapchatAudienceUsersApiClient.uploadUsers(externalId, dataSourceDto.getDataType(), usersData);
-//
-//    }
+    private final TwitterAudienceUsersApiClient twitterAudienceUsersApiClient;
+
+    public int uploadUsers(String socialAccountId, String externalId, Long expireMinutes, DataSourceDto dataSourceDto,
+                       int pageNumber, Integer pageSize) {
+
+        List<String> usersData = bigQueryService.loadStringValuesPage(dataSourceDto.getDataSet(),
+                                                                      dataSourceDto.getTemporaryTableName(), pageNumber,
+                                                                      pageSize);
+
+        //not hash emails as they are stored already hashed in BigQuery
+        boolean needSha = !dataSourceDto.getDataType().equalsIgnoreCase(AudienceUploadFieldNames.EMAIL);
+        usersData = usersData.stream().map(id -> needSha ? sha256(id) : id).collect(Collectors.toList());
+
+        return twitterAudienceUsersApiClient.uploadUsers(socialAccountId, externalId, expireMinutes,
+                                                     dataSourceDto.getDataType(), usersData);
+    }
 
     @SneakyThrows
     private static String sha256(String message) {
