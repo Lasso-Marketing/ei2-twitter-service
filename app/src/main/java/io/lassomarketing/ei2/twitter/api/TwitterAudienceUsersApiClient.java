@@ -1,11 +1,13 @@
 package io.lassomarketing.ei2.twitter.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lassomarketing.ei2.common.exception.EI2Exception;
 import io.lassomarketing.ei2.twitter.api.model.TwitterApiResponse;
 import io.lassomarketing.ei2.twitter.api.model.TwitterAudienceUsersDto;
 import io.lassomarketing.ei2.twitter.api.model.TwitterAudienceUsersOperation;
 import io.lassomarketing.ei2.twitter.api.oauth.AuthorizationService;
+import io.lassomarketing.ei2.twitter.config.AppConfig;
 import io.lassomarketing.ei2.twitter.service.AudienceUploadFieldNames;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -21,7 +23,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.AUDIENCE_USERS_PAYLOAD_EXCEEDED;
+import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.SERIALIZATION_ERROR;
 import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.UNKNOWN_SCHEMA;
+import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.WRONG_UPLOADED_AMOUNT;
 
 @Slf4j
 @Service
@@ -31,13 +36,16 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
 
     private final TwitterAudienceUsersRestOperations twitterAudienceUsersRestOperations;
 
+    private final AppConfig appConfig;
+
     protected TwitterAudienceUsersApiClient(
             ObjectMapper objectMapper,
             TwitterAudienceUsersRestOperations twitterAudienceUsersRestOperations,
-            AuthorizationService authorizationService
-    ) {
+            AuthorizationService authorizationService,
+            AppConfig appConfig) {
         super(objectMapper, authorizationService);
         this.twitterAudienceUsersRestOperations = twitterAudienceUsersRestOperations;
+        this.appConfig = appConfig;
     }
 
     /**
@@ -51,10 +59,18 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         List<TwitterAudienceUsersOperation> usersOperations = getUserOperations(usersData, dataType, expireMinutes);
+        String requestBody;
+        try {
+            requestBody = objectMapper.writeValueAsString(usersOperations);
+        } catch (JsonProcessingException e) {
+            throw new EI2Exception(SERIALIZATION_ERROR.getCode(), e.getMessage());
+        }
+        if (requestBody.length() >= appConfig.getUploadAudiencePayloadLimit()) {
+            throw new EI2Exception(AUDIENCE_USERS_PAYLOAD_EXCEEDED.getCode(), requestBody.length(),
+                                   appConfig.getUploadAudiencePayloadLimit());
+        }
 
-        //TODO check size
-
-        HttpEntity<?> httpEntity = new HttpEntity<>(usersOperations, headers);
+        HttpEntity<?> httpEntity = new HttpEntity<>(requestBody, headers);
         ResponseEntity<TwitterApiResponse> responseEntity =
                 twitterAudienceUsersRestOperations.exchange(uri, HttpMethod.POST, httpEntity, TwitterApiResponse.class);
 
@@ -63,10 +79,7 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
         Integer totalCount = usersDto.getTotalCount();
         Integer usersAmount = usersData.size();
         if (!Objects.equals(usersAmount, successCount) || !Objects.equals(usersAmount, totalCount)) {
-            throw new TwitterApiException(String.format(
-                    "Success (%d) or total (%d) uploaded users not equals to batch size: %d",
-                    successCount, totalCount, usersAmount
-            ));
+            throw new EI2Exception(WRONG_UPLOADED_AMOUNT.getCode(), successCount, totalCount, usersAmount);
         }
 
         log.info("There are {} users successfully uploaded for the {} audience of Twitter account {}",

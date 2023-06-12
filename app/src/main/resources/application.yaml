@@ -25,7 +25,7 @@ spring:
 
 app:
   error-prefix: TWITTER
-  users-batch-payload-size: 5_000_000
+  upload-audience-payload-limit: 5_000_000
 
   twitter:
     root-uri: https://ads-api.twitter.com/12

@@ -76,7 +76,7 @@ public class TwitterService {
                                                             dataSource.getTemporaryTableName());
             long usersAmount = bigQueryService.getTableSize(dataSource.getDataSet(), dataSource.getTemporaryTableName())
                     .intValueExact();
-            long payloadSizeLimit = appConfig.getUsersBatchPayloadSize();
+            long payloadSizeLimit = appConfig.getUploadAudiencePayloadLimit();
 
             int usersPerBatch = (int) (payloadSizeLimit / (double) tableBytes * usersAmount);
             int batchesAmount = usersAmount / usersPerBatch + usersAmount % usersPerBatch > 0 ? 1 : 0;

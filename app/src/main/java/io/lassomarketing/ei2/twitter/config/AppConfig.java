@@ -14,6 +14,6 @@ import jakarta.validation.constraints.NotNull;
 public class AppConfig {
 
     @NotNull
-    private Long usersBatchPayloadSize;
+    private Long uploadAudiencePayloadLimit;
 
 }

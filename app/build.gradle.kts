@@ -87,8 +87,7 @@ apply(plugin = "io.spring.dependency-management")
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.2")
-        mavenBom("com.google.cloud:spring-cloud-gcp-dependencies:4.3.0")
-        mavenBom("io.grpc:grpc-bom:1.55.1")  //TODO remove from template after spring bom upgrades to this version or above
+        mavenBom("com.google.cloud:spring-cloud-gcp-dependencies:4.4.0")
     }
 }
 
