@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum Ei2TwitterErrorCode {
 
-    UNKNOWN_SCHEMA("TWITTER-0001"),
     WRONG_UPLOADED_AMOUNT("TWITTER-0002"),
     MISSED_STATISTICS_RECORD("TWITTER-0003"),
     NO_AUDIENCE_DATA("TWITTER-0004"),

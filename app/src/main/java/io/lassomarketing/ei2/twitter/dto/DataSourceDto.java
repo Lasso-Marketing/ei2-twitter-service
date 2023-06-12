@@ -11,7 +11,6 @@ public class DataSourceDto {
 
     private String dataSet;
 
-    private String dataType;    // either EMAIL or MADID for device ids
-    //TODO enum
+    private AudienceDataType dataType;
 
 }

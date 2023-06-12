@@ -1,6 +1,7 @@
 package io.lassomarketing.ei2.twitter.service;
 
 import io.lassomarketing.ei2.twitter.api.TwitterAudienceUsersApiClient;
+import io.lassomarketing.ei2.twitter.dto.AudienceDataType;
 import io.lassomarketing.ei2.twitter.dto.DataSourceDto;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -29,7 +30,7 @@ public class AudienceUsersService {
                                                                       pageSize);
 
         //not hash emails as they are stored already hashed in BigQuery
-        boolean needSha = !dataSourceDto.getDataType().equalsIgnoreCase(AudienceUploadFieldNames.EMAIL);
+        boolean needSha = dataSourceDto.getDataType() != AudienceDataType.EMAIL;
         usersData = usersData.stream().map(id -> needSha ? sha256(id) : id).collect(Collectors.toList());
 
         return twitterAudienceUsersApiClient.uploadUsers(socialAccountId, externalId, expireMinutes,

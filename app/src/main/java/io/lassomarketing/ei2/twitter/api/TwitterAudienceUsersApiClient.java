@@ -8,7 +8,7 @@ import io.lassomarketing.ei2.twitter.api.model.TwitterAudienceUsersDto;
 import io.lassomarketing.ei2.twitter.api.model.TwitterAudienceUsersOperation;
 import io.lassomarketing.ei2.twitter.api.oauth.AuthorizationService;
 import io.lassomarketing.ei2.twitter.config.AppConfig;
-import io.lassomarketing.ei2.twitter.service.AudienceUploadFieldNames;
+import io.lassomarketing.ei2.twitter.dto.AudienceDataType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.AUDIENCE_USERS_PAYLOAD_EXCEEDED;
 import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.SERIALIZATION_ERROR;
-import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.UNKNOWN_SCHEMA;
 import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.WRONG_UPLOADED_AMOUNT;
 
 @Slf4j
@@ -52,8 +51,8 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
      * <a href="https://developer.twitter.com/en/docs/twitter-ads-api/audiences/api-reference/custom-audience-users">
      *      Twitter upload users documentation </a>
      */
-    public int uploadUsers(String twitterAccountId, String audienceExternalId, Long expireMinutes, String dataType,
-                           List<String> usersData) {
+    public int uploadUsers(String twitterAccountId, String audienceExternalId, Long expireMinutes,
+                           AudienceDataType dataType, List<String> usersData) {
         String uri = String.format(URI, twitterAccountId, audienceExternalId);
         HttpHeaders headers = createHeaders(HttpMethod.POST, uri);
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -87,7 +86,7 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
         return successCount;
     }
 
-    private List<TwitterAudienceUsersOperation> getUserOperations(List<String> usersData, String dataType,
+    private List<TwitterAudienceUsersOperation> getUserOperations(List<String> usersData, AudienceDataType dataType,
                                                                   Long expireMinutes) {
 
         List<TwitterAudienceUsersOperation.User> users = usersData.stream()
@@ -103,11 +102,10 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
         return List.of(usersOperation);
     }
 
-    private TwitterAudienceUsersOperation.User mapUserDataToTwitterUsers(String userData, String dataType) {
+    private TwitterAudienceUsersOperation.User mapUserDataToTwitterUsers(String userData, AudienceDataType dataType) {
         return switch (dataType) {
-            case AudienceUploadFieldNames.EMAIL -> TwitterAudienceUsersOperation.User.ofEmail(userData);
-            case AudienceUploadFieldNames.MADID -> TwitterAudienceUsersOperation.User.ofMadid(userData);
-            default -> throw new EI2Exception(UNKNOWN_SCHEMA.getCode(), dataType);
+            case EMAIL -> TwitterAudienceUsersOperation.User.ofEmail(userData);
+            case MADID -> TwitterAudienceUsersOperation.User.ofMadid(userData);
         };
     }
 
