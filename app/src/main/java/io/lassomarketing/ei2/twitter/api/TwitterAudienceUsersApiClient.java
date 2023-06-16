@@ -68,6 +68,8 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
             throw new EI2Exception(AUDIENCE_USERS_PAYLOAD_EXCEEDED.getCode(), requestBody.length(),
                                    appConfig.getUploadAudiencePayloadLimit());
         }
+        log.info("Uploading page with length {} out of {}", requestBody.length(),
+                 appConfig.getUploadAudiencePayloadLimit());
 
         HttpEntity<?> httpEntity = new HttpEntity<>(requestBody, headers);
         ResponseEntity<TwitterApiResponse> responseEntity =

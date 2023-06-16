@@ -57,9 +57,7 @@ public class TwitterController {
     }
 
     private String getTraceId() {
-        String traceId = tracer.currentSpan().context().traceId();
-        TraceLoggingEnhancer.setCurrentTraceId(traceId);
-        return traceId;
+        return tracer.currentSpan().context().traceId();
     }
 
 }

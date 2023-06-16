@@ -7,7 +7,7 @@ services:
     image: 'localhost:5000/lasso-docker/ei2-twitter-service:latest'
     networks: [ ei2net ]
     ports:
-      - '8080:8080'
+      - '8091:8091'
       - '5005:5005'
     environment:
       - SPRING_PROFILES_ACTIVE=local

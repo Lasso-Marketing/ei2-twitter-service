@@ -11,6 +11,8 @@ spring:
     gcp:
       bigquery:
         dataset-name: match_dictionaries
+  messages:
+    basename: error-codes
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

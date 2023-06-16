@@ -30,8 +30,9 @@ public class AudienceUsersService {
                                                                       pageSize);
 
         //not hash emails as they are stored already hashed in BigQuery
-        boolean needSha = dataSourceDto.getDataType() != AudienceDataType.EMAIL;
-        usersData = usersData.stream().map(id -> needSha ? sha256(id) : id).collect(Collectors.toList());
+        if (dataSourceDto.getDataType() != AudienceDataType.EMAIL) {
+            usersData = usersData.stream().map(AudienceUsersService::sha256).collect(Collectors.toList());
+        }
 
         return twitterAudienceUsersApiClient.uploadUsers(socialAccountId, externalId, expireMinutes,
                                                      dataSourceDto.getDataType(), usersData);
