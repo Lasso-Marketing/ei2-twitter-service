@@ -1,6 +1,5 @@
 package io.lassomarketing.ei2.twitter.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lassomarketing.ei2.common.exception.EI2Exception;
 import io.lassomarketing.ei2.twitter.api.model.TwitterApiResponse;
@@ -24,7 +23,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.AUDIENCE_USERS_PAYLOAD_EXCEEDED;
-import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.SERIALIZATION_ERROR;
 import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.WRONG_UPLOADED_AMOUNT;
 
 @Slf4j
@@ -51,19 +49,11 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
      * <a href="https://developer.twitter.com/en/docs/twitter-ads-api/audiences/api-reference/custom-audience-users">
      *      Twitter upload users documentation </a>
      */
-    public int uploadUsers(String twitterAccountId, String audienceExternalId, Long expireMinutes,
-                           AudienceDataType dataType, List<String> usersData) {
+    public int uploadUsers(String twitterAccountId, String audienceExternalId, String requestBody, int usersAmount) {
         String uri = String.format(URI, twitterAccountId, audienceExternalId);
         HttpHeaders headers = createHeaders(HttpMethod.POST, uri);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        List<TwitterAudienceUsersOperation> usersOperations = getUserOperations(usersData, dataType, expireMinutes);
-        String requestBody;
-        try {
-            requestBody = objectMapper.writeValueAsString(usersOperations);
-        } catch (JsonProcessingException e) {
-            throw new EI2Exception(SERIALIZATION_ERROR.getCode(), e.getMessage());
-        }
         if (requestBody.length() >= appConfig.getUploadAudiencePayloadLimit()) {
             throw new EI2Exception(AUDIENCE_USERS_PAYLOAD_EXCEEDED.getCode(), requestBody.length(),
                                    appConfig.getUploadAudiencePayloadLimit());
@@ -78,7 +68,6 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
         TwitterAudienceUsersDto usersDto = parseResponseData(responseEntity, TwitterAudienceUsersDto.class);
         Integer successCount = usersDto.getSuccessCount();
         Integer totalCount = usersDto.getTotalCount();
-        Integer usersAmount = usersData.size();
         if (!Objects.equals(usersAmount, successCount) || !Objects.equals(usersAmount, totalCount)) {
             throw new EI2Exception(WRONG_UPLOADED_AMOUNT.getCode(), successCount, totalCount, usersAmount);
         }
@@ -88,8 +77,8 @@ public class TwitterAudienceUsersApiClient extends TwitterApiClient {
         return successCount;
     }
 
-    private List<TwitterAudienceUsersOperation> getUserOperations(List<String> usersData, AudienceDataType dataType,
-                                                                  Long expireMinutes) {
+    public List<TwitterAudienceUsersOperation> getUserOperations(List<String> usersData, AudienceDataType dataType,
+                                                                 Long expireMinutes) {
 
         List<TwitterAudienceUsersOperation.User> users = usersData.stream()
                 .map(userData -> mapUserDataToTwitterUsers(userData, dataType)).collect(Collectors.toList());

@@ -16,4 +16,7 @@ public class AppConfig {
     @NotNull
     private Long uploadAudiencePayloadLimit;
 
+    @NotNull
+    private Float uploadAudiencePayloadFactor;
+
 }

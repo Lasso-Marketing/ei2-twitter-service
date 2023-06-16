@@ -27,6 +27,7 @@ spring:
 
 app:
   error-prefix: TWITTER
+  upload-audience-payload-factor: 0.9
   upload-audience-payload-limit: 5_000_000
 
   twitter:

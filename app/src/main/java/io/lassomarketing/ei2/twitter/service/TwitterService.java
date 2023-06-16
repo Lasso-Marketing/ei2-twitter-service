@@ -31,6 +31,8 @@ import static io.lassomarketing.ei2.twitter.exception.Ei2TwitterErrorCode.NO_AUD
 @AllArgsConstructor
 public class TwitterService {
 
+    private final static int PAYLOAD_SIZE_TEST_USERS_AMOUNT = 1000;
+
     private final AudienceUsersService audienceUsersService;
 
     private final BigQueryService bigQueryService;
@@ -69,38 +71,49 @@ public class TwitterService {
     public List<PreparePagesResponse> preparePages(List<DataSourceDto> dataSources, String traceId) {
         int totalRecords = 0;
 
-        List<PreparePagesResponse> pagesResponse = new ArrayList<>();
+        List<PreparePagesResponse> responsePages = new ArrayList<>();
 
         for (DataSourceDto dataSource : dataSources) {
-            long tableBytes = bigQueryService.getTableBytes(dataSource.getDataSet(),
-                                                            dataSource.getTemporaryTableName());
-            long usersAmount = bigQueryService.getTableSize(dataSource.getDataSet(), dataSource.getTemporaryTableName())
-                    .intValueExact();
-            long payloadSizeLimit = appConfig.getUploadAudiencePayloadLimit();
-
-            int usersPerBatch = (int) (payloadSizeLimit / (double) tableBytes * usersAmount);
-            int batchesAmount = usersAmount / usersPerBatch + usersAmount % usersPerBatch > 0 ? 1 : 0;
-
-            for (int i = 0; i < batchesAmount ; i++) {
-                pagesResponse.add(new PreparePagesResponse(dataSource, i, usersPerBatch));
-            }
-
-            totalRecords += usersAmount;
+            long dataSourceUsersAmount = addDataSourcePages(responsePages, dataSource);
+            totalRecords += dataSourceUsersAmount;
         }
 
-        if (pagesResponse.isEmpty()) {
+        if (responsePages.isEmpty()) {
             throw new EI2Exception(NO_AUDIENCE_DATA.getCode(),
                                    dataSources.stream().map(DataSourceDto::getTemporaryTableName)
                                            .collect(Collectors.joining(", ")));
         }
 
-        log.info("prepared {} pages for tables: {}", pagesResponse.size(), dataSources.stream()
+        log.info("prepared {} pages for tables: {}", responsePages.size(), dataSources.stream()
                 .map(DataSourceDto::getTemporaryTableName).collect(Collectors.joining(",")));
 
         AudienceUploadStatistics statistics = new AudienceUploadStatistics(traceId, totalRecords);
         audienceUploadStatisticsRepository.save(statistics);
 
-        return pagesResponse;
+        return responsePages;
+    }
+
+    private long addDataSourcePages(List<PreparePagesResponse> pagesResponse, DataSourceDto dataSource) {
+        //get first 1000 users to estimate actual payload size per user, use stub expireMinutes=0
+        List<String> usersData = audienceUsersService.getUsersData(dataSource, 0, PAYLOAD_SIZE_TEST_USERS_AMOUNT);
+        String uploadUsersRequest = audienceUsersService.prepareUsersUploadRequest(usersData, dataSource.getDataType(),
+                                                                                   0L);
+        float payloadSizeFactor = appConfig.getUploadAudiencePayloadFactor();
+        long testLength = uploadUsersRequest.getBytes().length;
+        long payloadSizeLimit = appConfig.getUploadAudiencePayloadLimit();
+
+        int usersPerBatch = (int) (payloadSizeFactor * payloadSizeLimit / (double) testLength * usersData.size());
+
+        long totalUsersAmount = bigQueryService
+                .getTableSize(dataSource.getDataSet(), dataSource.getTemporaryTableName()).longValueExact();
+
+        int batchesAmount = (int) (totalUsersAmount / usersPerBatch + (totalUsersAmount % usersPerBatch > 0 ? 1 : 0));
+
+        for (int i = 0; i < batchesAmount ; i++) {
+            pagesResponse.add(new PreparePagesResponse(dataSource, i, usersPerBatch));
+        }
+
+        return totalUsersAmount;
     }
 
     public UploadResultsResponse getUploadResults(AudienceIdDto audienceIdDto, String traceId) {
