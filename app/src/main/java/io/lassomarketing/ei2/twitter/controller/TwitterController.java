@@ -1,6 +1,5 @@
 package io.lassomarketing.ei2.twitter.controller;
 
-import com.google.cloud.logging.TraceLoggingEnhancer;
 import io.lassomarketing.ei2.common.response.EI2ResponseBody;
 import io.lassomarketing.ei2.twitter.service.TwitterService;
 import io.lassomarketing.ei2.twitter.dto.AudienceIdDto;

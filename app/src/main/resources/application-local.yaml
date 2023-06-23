@@ -9,4 +9,5 @@ app:
 logging:
   level:
     io.lassomarketing: DEBUG
+    com.zaxxer.hikari.pool: INFO
 

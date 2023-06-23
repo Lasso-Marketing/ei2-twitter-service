@@ -8,6 +8,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
@@ -24,7 +25,7 @@ public class TwitterAudienceUsersApiConfig {
         return ApiLoggingInterceptor.builder()
                 .prefix("Twitter Audience Users")
                 .logRequestBody(false)
-                .logResponseBody(false)
+                .logResponseBody(true)
                 .debug(false)
                 .sensitiveHeaders(List.of(HttpHeaders.AUTHORIZATION))
                 .build();
@@ -50,6 +51,6 @@ public class TwitterAudienceUsersApiConfig {
         requestFactory.setBufferRequestBody(false);
         requestFactory.setConnectTimeout(properties.getConnectTimeoutMillis());
         requestFactory.setReadTimeout(properties.getReadTimeoutMillis());
-        return requestFactory;
+        return new BufferingClientHttpRequestFactory(requestFactory);
     }
 }
