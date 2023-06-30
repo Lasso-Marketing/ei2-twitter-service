@@ -32,18 +32,18 @@ public class AudienceUsersService {
     public int uploadUsers(String socialAccountId, String externalId, Long expireMinutes, DataSourceDto dataSourceDto,
                        int pageNumber, Integer pageSize) {
         List<String> usersData = getUsersData(dataSourceDto, pageNumber, pageSize);
-        String uploadUsersRequestBody = prepareUsersUploadRequest(usersData, dataSourceDto.getDataType(),
+        String uploadUsersRequestBody = prepareUsersUploadRequest(usersData, dataSourceDto.dataType(),
                                                                   expireMinutes);
         return twitterAudienceUsersApiClient.uploadUsers(socialAccountId, externalId, uploadUsersRequestBody,
                                                          usersData.size());
     }
 
     public List<String> getUsersData(DataSourceDto dataSourceDto, int pageNumber, Integer pageSize) {
-        List<String> usersData = bigQueryService.loadStringValuesPage(dataSourceDto.getDataSet(),
-                                                                      dataSourceDto.getTemporaryTableName(), pageNumber,
+        List<String> usersData = bigQueryService.loadStringValuesPage(dataSourceDto.dataSet(),
+                                                                      dataSourceDto.temporaryTableName(), pageNumber,
                                                                       pageSize);
         //not hash emails as they are stored already hashed in BigQuery
-        if (dataSourceDto.getDataType() != AudienceDataType.EMAIL) {
+        if (dataSourceDto.dataType() != AudienceDataType.EMAIL) {
             usersData = usersData.stream().map(AudienceUsersService::sha256).collect(Collectors.toList());
         }
         return usersData;

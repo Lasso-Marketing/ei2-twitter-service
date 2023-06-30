@@ -19,20 +19,12 @@ public class AudienceDto extends AudienceIdDto {
     @JsonProperty("audience_type")
     private String type;
 
-    @JsonProperty("filename")
     private String filename;
 
-    @JsonProperty("social_account_id")
     private String socialAccountId;
 
-    @JsonProperty("expire_minutes")
     private Long expireMinutes;
 
-    @JsonProperty("external_id")
     private String externalId;
-
-    public String getGroupName(){
-        return Optional.ofNullable(filename).orElse(name + "_" + type);
-    }
 
 }

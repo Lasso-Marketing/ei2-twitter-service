@@ -2,7 +2,6 @@ package io.lassomarketing.ei2.twitter.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,39 +15,22 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app.twitter")
 public class TwitterApiProperties {
 
-
-    @Getter(AccessLevel.NONE)
-    private final JsonNode twitterApiConfigSecret;
-
     @NotNull
     private String rootUri;
 
-    private String oauthConsumerKey;
+    private final String oauthConsumerKey;
 
-    private String oauthConsumerSecret;
+    private final String oauthConsumerSecret;
 
-    private String oauthToken;
+    private final String oauthToken;
 
-    private String oauthSecret;
+    private final String oauthSecret;
 
     public TwitterApiProperties(JsonNode twitterApiConfigSecret) {
-        this.twitterApiConfigSecret = twitterApiConfigSecret;
-    }
-
-    public String getOauthConsumerKey() {
-        return oauthConsumerKey == null ? twitterApiConfigSecret.at("/oauthConsumerKey").asText() : oauthConsumerKey;
-    }
-
-    public String getOauthConsumerSecret() {
-        return oauthConsumerSecret == null ? twitterApiConfigSecret.at("/oauthConsumerSecret").asText() : oauthConsumerSecret;
-    }
-
-    public String getOauthToken() {
-        return oauthToken == null ? twitterApiConfigSecret.at("/oauthToken").asText() : oauthToken;
-    }
-
-    public String getOauthSecret() {
-        return oauthSecret == null ? twitterApiConfigSecret.at("/oauthSecret").asText() : oauthSecret;
+        oauthToken = twitterApiConfigSecret.at("/oauthToken").asText();
+        oauthSecret = twitterApiConfigSecret.at("/oauthSecret").asText();
+        oauthConsumerKey = twitterApiConfigSecret.at("/oauthConsumerKey").asText();
+        oauthConsumerSecret = twitterApiConfigSecret.at("/oauthConsumerSecret").asText();
     }
 
 }

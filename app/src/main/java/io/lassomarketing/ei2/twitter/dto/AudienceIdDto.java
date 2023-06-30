@@ -14,13 +14,11 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class AudienceIdDto {
 
-    @JsonProperty("audience_id")
     private Integer audienceId;
 
     @JsonProperty("channel")
     private Integer exchangeId;
 
-    @JsonProperty("account_id")
     private Integer accountId;
 
 }

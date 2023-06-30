@@ -5,7 +5,7 @@ plugins {
     java
     jacoco
     id("org.barfuin.gradle.jacocolog") version "3.1.0"
-    id("org.springframework.boot") version "3.0.6"
+    id("org.springframework.boot") version "3.1.0"
     id("com.google.cloud.tools.jib") version "3.3.2"
     id("com.google.cloud.artifactregistry.gradle-plugin") version "2.2.1"
     id("io.spring.dependency-management") version "1.1.0"
@@ -22,18 +22,8 @@ jib {
         image = "eclipse-temurin:17-jre-alpine"
     }
     to {
-        image = "localhost:5000/lasso-docker/ei2-twitter-service"
-        tags = setOf("latest")
-    }
-    extraDirectories {
-        paths {
-            path {
-                setFrom(file("../bin"))
-            }
-        }
-        permissions.set(mapOf(
-            "/wait-for-it.sh" to "755"
-        ))
+        image = "gcr.io/${gcp_project}/ei2/ei2-twitter-service"
+        tags = setOf("latest", "${commit_sha}")
     }
 }
 
@@ -82,12 +72,10 @@ tasks.check {
     dependsOn(intTestTask)
 }
 
-apply(plugin = "io.spring.dependency-management")
-
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.2")
-        mavenBom("com.google.cloud:spring-cloud-gcp-dependencies:4.4.0")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.3")
+        mavenBom("com.google.cloud:spring-cloud-gcp-dependencies:4.5.1")
     }
 }
 

@@ -80,12 +80,12 @@ public class TwitterService {
 
         if (responsePages.isEmpty()) {
             throw new EI2Exception(NO_AUDIENCE_DATA.getCode(),
-                                   dataSources.stream().map(DataSourceDto::getTemporaryTableName)
+                                   dataSources.stream().map(DataSourceDto::temporaryTableName)
                                            .collect(Collectors.joining(", ")));
         }
 
         log.info("prepared {} pages for tables: {}", responsePages.size(), dataSources.stream()
-                .map(DataSourceDto::getTemporaryTableName).collect(Collectors.joining(",")));
+                .map(DataSourceDto::temporaryTableName).collect(Collectors.joining(",")));
 
         AudienceUploadStatistics statistics = new AudienceUploadStatistics(traceId, totalRecords);
         audienceUploadStatisticsRepository.save(statistics);
@@ -96,7 +96,7 @@ public class TwitterService {
     private long addDataSourcePages(List<PreparePagesResponse> pagesResponse, DataSourceDto dataSource) {
         //get first 1000 users to estimate actual payload size per user, use stub expireMinutes=0
         List<String> usersData = audienceUsersService.getUsersData(dataSource, 0, PAYLOAD_SIZE_TEST_USERS_AMOUNT);
-        String uploadUsersRequest = audienceUsersService.prepareUsersUploadRequest(usersData, dataSource.getDataType(),
+        String uploadUsersRequest = audienceUsersService.prepareUsersUploadRequest(usersData, dataSource.dataType(),
                                                                                    0L);
         float payloadSizeFactor = appConfig.getUploadAudiencePayloadFactor();
         long testLength = uploadUsersRequest.getBytes().length;
@@ -105,7 +105,7 @@ public class TwitterService {
         int usersPerBatch = (int) (payloadSizeFactor * payloadSizeLimit / (double) testLength * usersData.size());
 
         long totalUsersAmount = bigQueryService
-                .getTableSize(dataSource.getDataSet(), dataSource.getTemporaryTableName()).longValueExact();
+                .getTableSize(dataSource.dataSet(), dataSource.temporaryTableName()).longValueExact();
 
         int batchesAmount = (int) (totalUsersAmount / usersPerBatch + (totalUsersAmount % usersPerBatch > 0 ? 1 : 0));
 

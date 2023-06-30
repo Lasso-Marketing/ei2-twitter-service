@@ -29,7 +29,7 @@ public class TwitterController {
     private final Tracer tracer;
 
     /**
-     * @return externalIdDto
+     * @return externalId - created/updated exchange segment id
      */
     @PostMapping("/upsertAudience")
     public EI2ResponseBody<Map<String, String>> upsertAudience(@Valid @RequestBody UpsertAudienceRequest request) {
