@@ -16,19 +16,19 @@ public class SecretsConfig {
 
     @Bean
     public JsonNode twitterDbSecret(@Value("${sm://ei2-twitter-service-db-secret}") String secretValue) throws Exception {
-        try {
-            return objectMapper.readTree(secretValue);
-        } catch (JsonProcessingException e) {
-            throw new Exception("Secret ei2-twitter-service-db-secret contains invalid json", e);
-        }
+        return readSecretValue(secretValue, "ei2-twitter-service-db-secret");
     }
 
     @Bean
     public JsonNode twitterApiConfigSecret(@Value("${sm://api-twitter-config}") String secretValue) throws Exception {
+        return readSecretValue(secretValue, "api-twitter-config");
+    }
+
+    private JsonNode readSecretValue(String secretValue, String secretName) throws Exception {
         try {
             return objectMapper.readTree(secretValue);
         } catch (JsonProcessingException e) {
-            throw new Exception("Secret api-twitter-config contains invalid json", e);
+            throw new Exception("Secret %s contains invalid json".formatted(secretName), e);
         }
     }
 }

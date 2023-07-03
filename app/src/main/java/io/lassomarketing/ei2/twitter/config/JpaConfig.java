@@ -2,11 +2,9 @@ package io.lassomarketing.ei2.twitter.config;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariConfig;
 import io.lassomarketing.ei2.config.AppDBConfig;
 import io.lassomarketing.ei2.config.DatasourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +16,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 public class JpaConfig {
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Bean
     @ConfigurationProperties("app.db.twitter")
