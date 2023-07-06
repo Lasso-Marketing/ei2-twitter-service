@@ -9,7 +9,7 @@ steps:
       - -Pgcp_project=$PROJECT_ID
       - -Pcommit_sha=$COMMIT_SHA
   - id: 'deploy to cloud run'
-    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:alpine
     entrypoint: gcloud
     args:
       - run
@@ -22,6 +22,8 @@ steps:
       - --allow-unauthenticated
       - --service-account
       - ei2-run@${PROJECT_ID}.iam.gserviceaccount.com
+      - --ingress
+      - internal-and-cloud-load-balancing
       - --timeout
       - '600'
       - --add-cloudsql-instances
