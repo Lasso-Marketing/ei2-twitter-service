@@ -1,0 +1,5 @@
+app:
+  db:
+    twitter:
+      sqlInstance: lasso-prod-264521:us-central1:sql-microservice-prod
+        

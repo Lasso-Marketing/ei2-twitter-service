@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: ei2-twitter-service
+  sleuth:
+    sampler:
+      probability: 1.0
+  config:
+    import: "sm://"
+
+  cloud:
+    gcp:
+      bigquery:
+        dataset-name: match_dictionaries
+  messages:
+    basename: error-codes
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        generate_statistics: true
+        session.events.log: false
+    open-in-view: false
+
+  liquibase:
+    change-log: classpath:db/liquibase-changelog.xml
+
+app:
+  error-prefix: TWITTER
+  upload-audience-payload-factor: 0.9
+  upload-audience-payload-limit: 5_000_000
+
+  twitter:
+    root-uri: https://ads-api.twitter.com/12
+    api:
+      audience:
+        connect-timeout: 30s
+        read-timeout: 60s
+      audience-users:
+        connect-timeout: 30s
+        read-timeout: 60s
+
+  db:
+    hikari:
+      minimumIdle: 2
+      maximumPoolSize: 50
+      idleTimeout: 60000
+      maxLifetime: 1800000
+      leakDetectionThreshold: 180000
+      connectionTimeout: 30000
+    twitter:
+      url: jdbc:postgresql://

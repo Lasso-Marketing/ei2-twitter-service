@@ -1,0 +1,41 @@
+steps:
+  - id: 'gradle jib build (build and deploy to gcr)'
+    name: gradle:8.1-jdk17-alpine
+    entrypoint: gradle
+    args:
+      - -q
+      - --no-daemon
+      - jib
+      - -Pgcp_project=$PROJECT_ID
+      - -Pcommit_sha=$COMMIT_SHA
+  - id: 'deploy to cloud run'
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE_NAME}
+      - --image
+      - gcr.io/$PROJECT_ID/ei2/${_SERVICE_NAME}:$COMMIT_SHA
+      - --region
+      - ${_GCP_REGION}
+      - --allow-unauthenticated
+      - --service-account
+      - ei2-run@${PROJECT_ID}.iam.gserviceaccount.com
+      - --timeout
+      - '600'
+      - --add-cloudsql-instances
+      - $_CLOUD_SQL_INSTANCE
+      - --set-env-vars
+      - spring_profiles_active=$_ACTIVE_PROFILES
+      - --set-env-vars
+      - SPRING_APPLICATION_VERSION=$SHORT_SHA
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+    
+substitutions:
+  _GCP_REGION: us-central1
+  _SERVICE_NAME: ""
+  _ACTIVE_PROFILES: ""
+  _CLOUD_SQL_INSTANCE: ""

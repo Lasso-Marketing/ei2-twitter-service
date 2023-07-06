@@ -1,0 +1,15 @@
+# IDEA
+.idea/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings
+.metadata
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
