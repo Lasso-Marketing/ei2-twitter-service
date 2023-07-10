@@ -75,7 +75,7 @@ tasks.check {
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.3")
-        mavenBom("com.google.cloud:spring-cloud-gcp-dependencies:4.5.1")
+        mavenBom("com.google.cloud:spring-cloud-gcp-dependencies:4.1.3")
     }
 }
 
